@@ -1,0 +1,23 @@
+.vscode/*
+!.vscode/launch.json
+HELP.md
+build
+.env
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+out/
+!**/src/main/**/out/
+!**/src/test/**/out/
+
+### macOS ###
+.DS_Store
+
+### C++ ###
+CMakeUserPresets.json
+vcpkg_installed
+CMakeFiles
+CMakeCache.txt

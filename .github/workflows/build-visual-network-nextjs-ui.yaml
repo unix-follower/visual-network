@@ -1,0 +1,62 @@
+name: Build visual-network-nextjs-ui
+on:
+  pull_request:
+    paths:
+      - .github/workflows/build-visual-network-nextjs-ui.yaml
+      - visual-network-nextjs-ui/**
+    types:
+      - opened
+      - reopened
+      - synchronize
+
+env:
+  ACTIONS_STEP_DEBUG: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Install Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version-file: visual-network-nextjs-ui/package.json
+        
+      - name: Install dependencies
+        shell: bash
+        working-directory: visual-network-nextjs-ui
+        run: npm ci
+
+      - name: Check code formatting
+        id: check_format
+        continue-on-error: true
+        shell: bash
+        working-directory: visual-network-nextjs-ui
+        run: npm run check-format
+
+      - name: Show format logs on check failure
+        if: steps.check_format.outcome == 'failure'
+        shell: bash
+        working-directory: visual-network-nextjs-ui
+        run: |
+          npm run format
+          exit 1
+
+      - name: Run ESLint
+        shell: bash
+        working-directory: visual-network-nextjs-ui
+        run: npm run lint
+
+      - name: Run tests
+        shell: bash
+        working-directory: visual-network-nextjs-ui
+        run: npm run test
+
+      - name: Build visual-network-nextjs-ui
+        shell: bash
+        working-directory: visual-network-nextjs-ui
+        run: npm run build
